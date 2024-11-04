@@ -2,9 +2,7 @@ import produce from 'immer';
 import { GameState, GameAction, MovePayload, AttackPayload, DeployPayload, GameActionType, ServerActionType } from '../types/game';
 import { handleUnitMove, handleUnitAttack, handleUnitDeploy } from '../utils/gameUtils';
 
-export function gameReducer(state: GameState, action: GameAction): GameState {  
-  console.log('Reducer called with:', { state, action });
-  
+export function gameReducer(state: GameState, action: GameAction): GameState {    
   return produce(state, draft => {
     switch (action.type) {
       case ServerActionType.UpdateGameState:

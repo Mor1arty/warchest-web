@@ -3,7 +3,7 @@ import { GameAction, GameActionType, ServerActionType } from '../types/game';
 export class GameWebSocket {
   private static instance: GameWebSocket;
   private ws: WebSocket | null = null;
-  private messageHandler: ((message: any) => void) | null = null;
+  private dispatch: ((message: any) => void) | null = null;
 
   private constructor() {}
 
@@ -14,8 +14,8 @@ export class GameWebSocket {
     return GameWebSocket.instance;
   }
 
-  public initialize(onMessage: (message: any) => void) {
-    this.messageHandler = onMessage;
+  public initialize(dispatch: (message: any) => void) {
+    this.dispatch = dispatch;
     
     // 替换为你的 WebSocket 服务器地址
     this.ws = new WebSocket('ws://localhost:8080/ws');
@@ -27,8 +27,8 @@ export class GameWebSocket {
     this.ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        if (this.messageHandler) {
-          this.messageHandler(message);
+        if (this.dispatch) {
+          this.dispatch(message);
         }
       } catch (error) {
         console.error('WebSocket 消息解析错误:', error);
