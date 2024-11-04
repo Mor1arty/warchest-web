@@ -15,9 +15,20 @@
   }
 
   .hexagon {
-    @apply w-full h-full relative cursor-pointer;
+    @apply w-full h-full relative cursor-pointer bg-white;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
     transition: all 0.3s ease;
+  }
+
+  .hexagon::before {
+    content: '';
+    @apply absolute inset-0;
+    top: 1.5px;     /* 内边距 */
+    left: 1.5px;    /* 内边距 */
+    right: 1.5px;   /* 内边距 */
+    bottom: 1.5px;  /* 内边距 */
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    z-index: -1;
   }
 
   .hex-container:hover {
@@ -30,18 +41,23 @@
 
   .hex-content {
     @apply absolute inset-0 flex items-center justify-center text-sm text-gray-600;
+    z-index: 1;
   }
 
-  .hexagon::before {
-    content: '';
-    @apply absolute inset-0;
-    top: 1.5px;     /* 内边距 */
-    left: 1.5px;    /* 内边距 */
-    right: 1.5px;   /* 内边距 */
-    bottom: 1.5px;  /* 内边距 */
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    background-color: #f9e3bef8;
-    z-index: -1;
+  .hexagon.cell-Normal::before {
+    @apply bg-[#ffe7c4] !important;
+  }
+
+  .hexagon.cell-ControlPoint::before {
+    @apply bg-[#d7ecd8cc] !important;  /* 半透明的淡绿色 */
+  }
+
+  .hexagon.cell-Castle::before {
+    @apply bg-[#ffcdd2] !important;
+  }
+
+  .hexagon.cell-Blocked::before {
+    @apply bg-[#b89b89] !important;
   }
 
   .board-area {

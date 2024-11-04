@@ -21,7 +21,12 @@ export class GameWebSocket {
     this.ws = new WebSocket('ws://localhost:8080/ws');
 
     this.ws.onopen = () => {
-      console.log('WebSocket 连接已建立');
+      console.log('WebSocket 连接已建立, 更新游戏数据');
+      const updateGameStateAction = {
+        type: ServerActionType.UpdateGameState,
+        payload: {}
+      };
+      this.sendMessage(updateGameStateAction);
     };
 
     this.ws.onmessage = (event) => {

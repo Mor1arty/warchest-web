@@ -2,10 +2,17 @@
 import React from 'react';
 import { useGame } from '../../hooks/useGame';
 import UnitCard from './UnitCard';
-import { Player, UNIT_DEFINITIONS } from '../../types/game';
+import { Player, Unit, UNIT_DEFINITIONS } from '../../types/game';
 import { getUnitIcon } from '../../utils/unitUtils';
 
-const PlayerInfo: React.FC<{ player: Player, position: 'top' | 'bottom', showHand: boolean, selectedUnit: string | null }> = ({ player, position, showHand, selectedUnit }) => {
+interface PlayerInfoProps {
+  player: Player;
+  position: 'top' | 'bottom';
+  showHand: boolean;
+  selectedUnit: Unit | null;
+}
+
+const PlayerInfo: React.FC<PlayerInfoProps> = ({ player, position, showHand, selectedUnit }) => {
   const { gameState } = useGame();
 
   if (!player) {
@@ -24,47 +31,54 @@ const PlayerInfo: React.FC<{ player: Player, position: 'top' | 'bottom', showHan
   }
 
   return (
-    <div className={`
-      player-area 
-      flex 
-      items-center 
-      justify-between 
-      p-4
-      ${position === 'top' ? 'bg-gray-100' : 'bg-gray-200'}
-    `}>
-      {/* 左侧：招募区 */}
-      <div className="flex items-center gap-2">
-        <div className="supply-area flex gap-1">
-          {player.supply?.map(unit => (
-            <div key={unit.id} className="relative">
-              <div className="w-12 h-12 rounded-full overflow-hidden">
-                <img src={getUnitIcon(unit.type)} alt={UNIT_DEFINITIONS[unit.type].name} className="unit-icon" />
+    <div className="player-info-container h-full bg-blue-50 rounded-lg p-2">
+      <div className="flex justify-between items-center h-full">
+        {/* 补给区 */}
+        <div className="flex-1 h-full flex flex-col items-center border-r border-gray-200">
+          <div className="text-xs text-gray-500">Supply</div>
+          <div className="flex gap-1">
+            {player.supply?.map(unit => (
+              <div key={unit.id} className="relative">
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <img src={getUnitIcon(unit.type)} alt={UNIT_DEFINITIONS[unit.type].name} className="unit-icon" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div className="player-stats ml-4">
-          <div className="player-name font-bold">{player.name}</div>
-          <div className="action-points">AP: {gameState.actionPoints?.[player.id] ?? 0}</div>
+
+        {/* 手牌区 */}
+        <div className="flex-1 h-full flex flex-col items-center border-r border-gray-200">
+          <div className="text-xs text-gray-500">Hand</div>
+          <div className="flex gap-1">
+            {/* 这里放淘汰的单位图标 */}
+          </div>
         </div>
-      </div>
-    
-      {/* 中间：手牌区 */}
-      <div className="flex-grow flex justify-center gap-2">
-        {showHand && player.hand?.map(unit => (
-          <UnitCard key={unit.id} unit={unit} isSelected={selectedUnit === unit.id} onSelect={() => {}} />
-        ))}
-      </div>
-    
-      {/* 右侧：牌堆和弃牌堆 */}
-      <div className="flex gap-4">
-        <div className="bag-pile relative">
-          <div className="w-12 h-16 bg-green-700 rounded"></div>
-          <span className="absolute -bottom-2 text-sm">{player.bag?.length ?? 0}</span>
+
+        {/* 口袋区 */}
+        <div className="flex-1 h-full flex flex-col items-center border-r border-gray-200">
+          <div className="text-xs text-gray-500">Bag</div>
+          <div className="flex gap-1">
+            {showHand && player.hand?.map(unit => (
+              <UnitCard key={unit.id} unit={unit} isSelected={selectedUnit?.id === unit.id} onSelect={() => {}} />
+            ))}
+          </div>
         </div>
-        <div className="discard-pile relative">
-          <div className="w-12 h-16 bg-red-700 rounded"></div>
-          <span className="absolute -bottom-2 text-sm">{player.discardPile?.length ?? 0}</span>
+
+        {/* 弃牌堆 */}
+        <div className="flex-1 h-full flex flex-col items-center border-r border-gray-200">
+          <div className="text-xs text-gray-500">Discardpile</div>
+          <div className="flex gap-1">
+            {/* 这里放弃牌堆的单位图标 */}
+          </div>
+        </div>
+
+        {/* 弃牌堆 */}
+        <div className="flex-1 h-full flex flex-col items-center">
+          <div className="text-xs text-gray-500">Eliminated</div>
+          <div className="flex gap-1">
+            {/* 这里放弃牌堆的单位图标 */}
+          </div>
         </div>
       </div>
     </div>

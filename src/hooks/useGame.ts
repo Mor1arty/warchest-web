@@ -18,7 +18,8 @@ const initialState = {
       supply: [],
       hand: [],
       bag: [],
-      discardPile: []
+      discardPile: [],
+      eliminated: [],
     },
     ['player2']: {
       id: 'player2',
@@ -27,7 +28,8 @@ const initialState = {
       supply: [],
       hand: [],
       bag: [],
-      discardPile: []
+      discardPile: [],
+      eliminated: [],
     }
   },
   units: {},
@@ -45,20 +47,5 @@ const initialState = {
 export const useGame = () => {
   const [gameState, dispatch] = useReducer(gameReducer, initialState);
 
-  // 包装 dispatch 函数，在需要时同步到服务器
-  const wrappedDispatch = useCallback((action: any) => {
-    // 本地更新状态
-    dispatch(action);
-
-    // 某些操作需要同步到服务器
-    if (action.type === 'PLAYER_MOVE' || action.type === 'CARD_PLAYED') {
-      const websocket = GameWebSocket.getInstance();
-      websocket.sendMessage({
-        type: action.type,
-        payload: action.payload
-      });
-    }
-  }, []);
-
-  return { gameState, dispatch: wrappedDispatch };
+  return { gameState, dispatch };
 };

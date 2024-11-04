@@ -6,10 +6,10 @@ export enum GameStage {
 }
 
 export enum CellType {
-  Blocked,        // 障碍物
-  Normal,         // 普通地形
-  ControlPoint,   // 控制点
-  Castle,         // 城堡
+  Blocked = "Blocked",
+  Normal = "Normal",
+  ControlPoint = "ControlPoint",
+  Castle = "Castle",
 }
 
 export enum UnitStatus {
@@ -34,6 +34,7 @@ export interface Player {
     hand: Unit[];            // 手牌
     bag: Unit[];             // 袋中的单位
     discardPile: Unit[];     // 弃牌堆
+    eliminated: Unit[];      // 死亡区
   }
 
 export interface BoardSize {

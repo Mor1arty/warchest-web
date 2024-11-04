@@ -17,13 +17,15 @@ const Game: React.FC = () => {
 
   return (
     <div className="game-container h-screen flex flex-col bg-gray-100">
-      <div className="player-area p-4">
-        <PlayerInfo 
-          player={gameState.players[1]}
-          position="top"
-          showHand={false}
-          selectedUnit={null}
-        />
+      <div className="player-area h-[20vh] p-4 flex justify-center">
+        <div className="w-[70%]">
+          <PlayerInfo 
+            player={gameState.players[1]}
+            position="top"
+            showHand={false}
+            selectedUnit={null}
+          />
+        </div>
       </div>
 
       <div className="board-area flex-grow">
@@ -33,13 +35,15 @@ const Game: React.FC = () => {
         />
       </div>
 
-      <div className="player-area p-4">
-        <PlayerInfo 
-          player={gameState.players[0]}
-          position="bottom"
-          showHand={true}
-          selectedUnit={null}
-        />
+      <div className="player-area h-[20vh] p-4 flex justify-center">
+        <div className="w-[70%]">
+          <PlayerInfo 
+            player={gameState.players[0]}
+            position="bottom"
+            showHand={true}
+            selectedUnit={null}
+          />
+        </div>
       </div>
     </div>
   );

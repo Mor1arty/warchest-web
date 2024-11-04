@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Dispatch } from 'react';
-import { Position, GameState, ServerActionType, GameActionType, GameAction, MovePayload } from '../../types/game';
+import { Position, GameState, ServerActionType, GameActionType, GameAction, MovePayload, CellType } from '../../types/game';
 import { boardToAxial } from '../../utils/positionUtils';
 import { GameWebSocket } from '../../services/websocket';
 
@@ -7,15 +7,16 @@ interface HexProps {
   position: Position;
   onClick: () => void;
   radius: number;
+  cellType: CellType;
 }
 
-const Hexagon: React.FC<HexProps> = ({ position, onClick, radius }) => {
+const Hexagon: React.FC<HexProps> = ({ position, onClick, radius, cellType }) => {
   const width = radius * 2;
   const height = radius * 2 * Math.sqrt(3) / 2;
   return (
     <div className="hex-container">
       <div 
-        className="hexagon"
+        className={`hexagon cell-${cellType}`}
         onClick={onClick}
         style={{
           width: `${width}rem`,
@@ -23,7 +24,7 @@ const Hexagon: React.FC<HexProps> = ({ position, onClick, radius }) => {
         }}
       >
         <div className="hex-content">
-          {`${position.q},${position.r},${position.s}`}
+          {`${position.q},${position.r},${position.s}`}, {cellType}
         </div>
       </div>
     </div>
@@ -61,12 +62,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameState, dispatch }) => {
 
   const handleHexClick = (position: Position) => {
     console.log('点击位置:', position);
-    const ws = GameWebSocket.getInstance();
-    const action = {
-      type: ServerActionType.UpdateGameState,
-      payload: {}
-    };
-    ws.sendMessage(action);
   };
 
   // 生成六边形网格的坐标
@@ -89,7 +84,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameState, dispatch }) => {
   const getHexPosition = (pos: Position, radius: number) => {
     const offset = -radius;  // 偏移量，保持六边形中心在网格中心
     const x = (-1.5 * radius * pos.r - 1.5 * radius * pos.s) + offset;
-    const y = (radius * pos.r - radius * pos.s) * Math.sqrt(3) / 2 + offset + 0.4; 
+    const y = (radius * pos.r - radius * pos.s) * Math.sqrt(3) / 2 + offset + 0.7; 
     return { x, y };
   };
 
@@ -100,6 +95,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameState, dispatch }) => {
       <div className="hex-grid relative">
         {positions.map((pos) => {
           const { x, y } = getHexPosition(pos, radius);
+          const cell = gameState.board.cells[`${pos.q},${pos.r},${pos.s}`];
+          const cellType = cell ? cell.cellType : CellType.Normal;
+
           return (
             <div
               key={`${pos.q},${pos.r},${pos.s}`}
@@ -112,6 +110,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameState, dispatch }) => {
                 position={pos}
                 onClick={() => handleHexClick(pos)}
                 radius={radius}
+                cellType={cellType}
               />
             </div>
           );
