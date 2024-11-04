@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .hex-grid {
+    @apply p-8;
+    transform: scale(1);
+  }
+
+  .hex-container {
+    position: relative;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hexagon {
+    @apply w-full h-full relative cursor-pointer;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    transition: all 0.3s ease;
+  }
+
+  .hex-container:hover {
+    z-index: 100;
+  }
+
+  .hex-container:hover .hexagon {
+    @apply brightness-95;
+  }
+
+  .hex-content {
+    @apply absolute inset-0 flex items-center justify-center text-sm text-gray-600;
+  }
+
+  .hexagon::before {
+    content: '';
+    @apply absolute inset-0;
+    top: 1.5px;     /* 内边距 */
+    left: 1.5px;    /* 内边距 */
+    right: 1.5px;   /* 内边距 */
+    bottom: 1.5px;  /* 内边距 */
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    background-color: #f9e3bef8;
+    z-index: -1;
+  }
+
+  .board-area {
+    @apply bg-[#fff9f2] flex justify-center items-center w-full h-full;
+  }
+} 
