@@ -22,8 +22,8 @@ export enum UnitStatus {
 }
 
 export enum Team {
-  White,
-  Black,
+  White = 100,
+  Black = 200,
 }
 
 export interface Player {
