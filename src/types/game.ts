@@ -76,6 +76,9 @@ export enum UnitType {
   Pikeman,
   Crossbowman,
   Marshal,
+
+  // 特殊单位
+  CoinBack
 }
 export enum MovementDirectionType {
   Straight,
@@ -92,7 +95,7 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.LightCavalry,
     name: '轻骑兵',
     description: '可以移动两格',
-    icon: '/src/assets/images/wc_unit_coins/light_cavalry.png',
+    icon: '/images/wc_unit_coins/light_cavalry.png',
     moveRange: 2,
     movementType: MovementDirectionType.Flexible,
     attackRange: 1,
@@ -103,7 +106,7 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.Archer,
     name: '弓箭手',
     description: '可以远程攻击',
-    icon: '/src/assets/images/wc_unit_coins/archer.png',
+    icon: '/images/wc_unit_coins/archer.png',
     moveRange: 1,
     movementType: MovementDirectionType.Straight,
     attackRange: 2,
@@ -114,7 +117,7 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.Swordsman,
     name: '剑士',
     description: '近战单位',
-    icon: '/src/assets/images/wc_unit_coins/swordsman.png',
+    icon: '/images/wc_unit_coins/swordsman.png',
     moveRange: 1,
     movementType: MovementDirectionType.Straight,
     attackRange: 1,
@@ -125,7 +128,7 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.Pikeman,
     name: '枪兵',
     description: '长矛兵种',
-    icon: '/src/assets/images/wc_unit_coins/pikeman.png',
+    icon: '/images/wc_unit_coins/pikeman.png',
     moveRange: 1,
     movementType: MovementDirectionType.Straight,
     attackRange: 1,
@@ -136,7 +139,7 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.Crossbowman,
     name: '弩手',
     description: '强力远程单位',
-    icon: '/src/assets/images/wc_unit_coins/crossbowman.png',
+    icon: '/images/wc_unit_coins/crossbowman.png',
     moveRange: 1,
     movementType: MovementDirectionType.Straight,
     attackRange: 2,
@@ -147,12 +150,23 @@ export const UNIT_DEFINITIONS: Record<UnitType, UnitDefinition> = {
     type: UnitType.Marshal,
     name: '元帅',
     description: '指挥官单位',
-    icon: '/src/assets/images/wc_unit_coins/marshal.png',
+    icon: '/images/wc_unit_coins/marshal.png',
     moveRange: 1,
     movementType: MovementDirectionType.Straight,
     attackRange: 1,
     attackType: AttackDirectionType.Straight,
     abilities: ['command']
+  },
+  [UnitType.CoinBack]: {
+    type: UnitType.CoinBack,
+    name: '不可见',
+    description: '不可见单位',
+    icon: '/images/wc_unit_coins/coin_back.png',
+    moveRange: 0,
+    movementType: MovementDirectionType.Straight,
+    attackRange: 0,
+    attackType: AttackDirectionType.Straight,
+    abilities: []
   }
 };
 

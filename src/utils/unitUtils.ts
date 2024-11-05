@@ -27,17 +27,5 @@ export const getUnitAttackRange = (type: UnitType): number => {
 
 // 获取单位图标
 export const getUnitIcon = (type: UnitType) => {
-    // 这里可以根据不同的单位类型返回不同的图标
-    switch (type) {
-      case UnitType.LightCavalry:
-        return UNIT_DEFINITIONS[UnitType.LightCavalry].icon;
-      case UnitType.Archer:
-        return UNIT_DEFINITIONS[UnitType.Archer].icon;
-      case UnitType.Swordsman:
-        return UNIT_DEFINITIONS[UnitType.Swordsman].icon;
-      case UnitType.Pikeman:
-        return UNIT_DEFINITIONS[UnitType.Pikeman].icon;
-      default:
-        return '';
-    }
+    return UNIT_DEFINITIONS[type].icon;
 };

@@ -63,4 +63,14 @@
   .board-area {
     @apply bg-[#fff9f2] flex justify-center items-center w-full h-full;
   }
+
+  /* 可以添加到你的全局样式文件中 */
+  .unit-icon {
+    transition: transform 0.2s;
+  }
+
+  .unit-icon:hover {
+    transform: translateY(-2px);
+    cursor: pointer;
+  }
 } 
