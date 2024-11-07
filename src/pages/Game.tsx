@@ -1,30 +1,12 @@
 // src/pages/Game.tsx
-import React, { useEffect, useState } from 'react';
-import { useGame } from '../../hooks/useGame';
-import GameBoard from './Board';
-import PlayerInfo from './PlayerInfo';
-import { GameWebSocket } from '../../services/websocket';
-import { useNavigate } from 'react-router-dom';
-import { AuthService } from '../../services/auth';
-import GameStatusBar from './GameStatusBar';
+import React from 'react';
+import { useGame } from '../hooks/useGame';
+import GameBoard from '../components/Game/Board';
+import PlayerInfo from '../components/Game/PlayerInfo';
+import GameStatusBar from '../components/Game/GameStatusBar';
 
 const Game: React.FC = () => {
   const { gameState, dispatch } = useGame();
-  const navigate = useNavigate();
-
-  // 初始化 WebSocket 连接
-  useEffect(() => {
-    const authService = AuthService.getInstance();
-    const token = authService.getToken();
-
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    const websocket = GameWebSocket.getInstance();
-    websocket.initialize(dispatch, token);
-  }, [dispatch, navigate]);
 
   return (
     <div className="game-container h-screen flex flex-col bg-gray-100">

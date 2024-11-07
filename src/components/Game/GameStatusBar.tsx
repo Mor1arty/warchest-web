@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GameWebSocket } from '../../services/websocket';
+import { useWebSocket } from '../../hooks/useWebSocket';
 
 interface GameStatusBarProps {
   currentTurn: string;
@@ -10,12 +10,13 @@ interface GameStatusBarProps {
 }
 
 const GameStatusBar: React.FC<GameStatusBarProps> = ({ currentTurn, score, maxScore, initiative }) => {
+  const sendMessage = useWebSocket((message: any) => {});
+  
   return (
     <div className="w-full px-4 py-2 flex justify-between items-center bg-white shadow-sm">
       <button 
         onClick={() => {
-            const ws = GameWebSocket.getInstance();
-            ws.sendMessage({ type: 'LEAVE_ROOM', payload: {} });
+            sendMessage({ type: 'LEAVE_ROOM', payload: {} });
         }}
         className="flex items-center text-gray-600 hover:text-gray-800"
       >

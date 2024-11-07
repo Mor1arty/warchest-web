@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../services/auth';
+import { useWebSocketContext } from '../contexts/WebSocketContext';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,9 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
+  // 获取 WebSocket 上下文
+  const { connect, isConnected } = useWebSocketContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,11 +19,36 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
+      // 1. 登录验证
       const authService = AuthService.getInstance();
-      await authService.login(username, password);
-      navigate('/game');
+      const token = await authService.login(username, password);
+      
+      // 2. 主动初始化 WebSocket 连接
+      if (token) {
+        connect(token);
+      }
+      
+      // 3. 等待连接建立
+      let retries = 0;
+      const maxRetries = 5;
+      
+      while (!isConnected() && retries < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        retries++;
+      }
+
+      if (!isConnected()) {
+        throw new Error('WebSocket 连接失败');
+      }
+      
+      // 4. 连接成功，跳转到游戏页面
+      navigate('/lobby');
     } catch (err) {
-      setError('用户名或密码错误');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('用户名或密码错误');
+      }
     } finally {
       setLoading(false);
     }

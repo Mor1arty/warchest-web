@@ -1,37 +1,35 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { WebSocketProvider } from './contexts/WebSocketContext';
+import { withAuth } from './hoc/withAuth';
 import Login from './pages/Login';
-import Game from './components/Game/Game';
-import { AuthService } from './services/auth';
+import Lobby from './pages/Lobby';
+import Room from './pages/Room';
+import Game from './pages/Game';
 
-// 受保护的路由组件
-const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
-  const authService = AuthService.getInstance();
-  const token = authService.getToken();
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children;
-};
+// 使用 HOC 保护路由
+const ProtectedLobby = withAuth(Lobby);
+const ProtectedRoom = withAuth(Room);
+const ProtectedGame = withAuth(Game);
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/game"
-          element={
-            <ProtectedRoute>
-              <Game />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/" element={<Navigate to="/game" replace />} />
-      </Routes>
-    </Router>
+    <WebSocketProvider>
+      <Router>
+        <Routes>
+          {/* 公开路由 */}
+          <Route path="/login" element={<Login />} />
+
+          {/* 受保护的路由 */}
+          <Route path="/" element={<ProtectedLobby />} />
+          <Route path="/room/:roomId" element={<ProtectedRoom />} />
+          <Route path="/game/:gameId" element={<ProtectedGame />} />
+
+          {/* 默认重定向到大厅 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </WebSocketProvider>
   );
 };
 

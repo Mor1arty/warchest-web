@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef, Dispatch } from 'react';
 import { Position, GameState, ServerActionType, GameActionType, GameAction, MovePayload, CellType } from '../../types/game';
-import { boardToAxial } from '../../utils/positionUtils';
-import { GameWebSocket } from '../../services/websocket';
 
 interface HexProps {
   position: Position;

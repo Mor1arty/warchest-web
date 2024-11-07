@@ -1,7 +1,7 @@
-import { useReducer, useCallback } from 'react';
-import { GameWebSocket } from '../services/websocket';
+import { useReducer, useCallback, useEffect } from 'react';
 import { GameStage, ServerActionType, Team } from '../types/game';
 import { gameReducer } from '../reducers/gameReducer';
+import { useWebSocketContext } from '../contexts/WebSocketContext';
 
 // 创建初始游戏状态
 const initialState = {    
@@ -46,6 +46,19 @@ const initialState = {
 
 export const useGame = () => {
   const [gameState, dispatch] = useReducer(gameReducer, initialState);
+  const { subscribe, sendMessage } = useWebSocketContext();
+  
+  useEffect(() => {
+    return subscribe((message) => {
+      if (message.type === ServerActionType.UpdateGameState) {
+        dispatch(message);
+      }
+    });
+  }, [subscribe]);
 
-  return { gameState, dispatch };
+  return {
+    gameState,
+    dispatch,
+    sendGameMessage: sendMessage
+  };
 };
